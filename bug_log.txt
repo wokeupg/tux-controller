@@ -1,0 +1,25 @@
+1. My screen would glitch, the pixels from the photo would be smeared on the exit window such that my devl window would show a brownish red pixelated blov instead of a black screen. I realized that I had switched two sections of my hex numbers in modex.c, specifically the section for MODE_X_CRTC and text_CRTC. I thought the values were the same in both sections. To fix this issue, I switched them back to the correct func. 
+
+2. My code generated an argument do not match error/warning because I had some of my inputs as const char, char, and unsigned char for the same variables in different text_to_grpahic function. The inconsistency resulted in the error. To fix this, I went back and double checked all my argument types and made sure they were consistent. Variables like room and status_txt are const char* because they don't change. However, variables like typed_cmd are variable such that they are defined as char*.
+
+3. In my text_to_graphics function I wrote curr_char = font_data[(text[int i])][j]. This generated an error as it is not valid syntax in C. The correct way is font_data[((int)text[i])][j]. (int)text[i] is used when you want to convert a character to its integer ASCII code.
+
+4. After implemnting my status bar, the scrolling was not working in my code until I realized I had to subtract 18 which is the status bar height from IMAGE_Y_DIM which is the vertical Y dimension in pixels. I changed it to IMAGE_Y_DIM-18 to account for this.
+
+5. My typed command on the right side of the demo screen was typing out the status message, not the characters that I was typing. In my show_status_bar function in modex.c, text_to_graphics(room, buffer, status_msg). It resulted in my text_length_two contained the characters of status message. That was written to screen instead of typed_cmd. To fix this, I changed it to text_to_graphics(room, buffer, typed_cmd).
+
+6. In my for loop for add cursor I iterated (i=0; i < text_length_two; i++) when I did not need to. My i is 95 for the function font_data[95][j]. The resulting behavior of having the i for loop that iterated through text_length_two was that the cursor would only show up if I typed. I fixed this by taking the iterating i loop out. 
+
+
+Checkpoint 2
+I initialized my struct as octree_arr struct. However the proper way to initialize a struct is with typedef struct{ elements;} octree_arr_t.
+
+I initialized my array to be level_four =  struct octree_arr_t [4096]]. However, the correct way is to use malloc to create total memory = 4096 * the six of the struct and then cast a pointer to that memory to octree_arr_t to assign to level_four pointer.
+
+In my qsort function, I put sizeof(int) instead of sizeof(octree_arr_t). I am supposed to pass the size of each element in the array, not the size of each element in the struct.
+
+I never printed the pixels to screen because I forgot p->img[p->hdr.width*y+x] = i + 64 which fills the specific pixel in an image buffer represented by p->img.
+
+I forgot to include my .h files including tuxctl-ioctl.h and the input.c #include functions in my adventure.c when trying to connect my TUX to game.
+
+I forgot to free my level_two and level_four pointers at the end of my Octree code. I deallocated the memory so that my program does not suffer from memory leaks when the program needs available memory resources.
